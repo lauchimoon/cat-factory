@@ -3,6 +3,7 @@
 
 #define NFURS 7
 #define NHATS 12
+#define NFACEWEAR 10
 #define NBACKGROUNDS 7
 
 #define WINDOW_TITLE "Cat Factory"
@@ -19,7 +20,7 @@ enum {
 };
 
 typedef struct Configuration {
-    int bg, fur, hat;
+    int bg, fur, hat, face;
 } Configuration;
 
 // Global constants
@@ -33,6 +34,7 @@ Texture tx_backgrounds_preview;
 Texture tx_fur;
 Texture tx_fur_preview;
 Texture tx_hats;
+Texture tx_facewear;
 
 Rectangle frame_src;
 Rectangle frame_pos;
@@ -93,6 +95,10 @@ int main()
         config.hat -= IsKeyPressed(KEY_LEFT);
         config.hat += IsKeyPressed(KEY_RIGHT);
 
+        // Change facewear
+        config.face -= IsKeyPressed(KEY_A);
+        config.face += IsKeyPressed(KEY_D);
+
         // Scramble the configuration!
         if (IsKeyPressed(KEY_R)) randomize(&config);
 
@@ -131,6 +137,14 @@ int main()
                     tx_base_cat,
                     rt_cat_export.texture.width/2 - tx_base_cat.width/2 - 5,
                     rt_cat_export.texture.height - 3.5*(float)CAT_OFFSET_Y,
+                    WHITE
+            );
+
+            // Draw cat's facewear
+            DrawTextureRec(
+                    tx_facewear,
+                    (Rectangle){ config.face*tx_facewear.width/NFACEWEAR, 0, tx_facewear.width/NFACEWEAR, tx_facewear.height },
+                    (Vector2){ rt_cat_export.texture.width/2 - tx_base_cat.width/2 - 5, rt_cat_export.texture.height - 3.5*(float)CAT_OFFSET_Y },
                     WHITE
             );
 
@@ -182,6 +196,7 @@ void load_textures(void)
     tx_fur = LoadTexture("./assets/fur.png");
     tx_fur_preview = LoadTexture("./assets/furs-selector.png");
     tx_hats = LoadTexture("./assets/hats.png");
+    tx_facewear = LoadTexture("./assets/facewear.png");
 }
 
 void unload_textures(void)
@@ -192,6 +207,7 @@ void unload_textures(void)
     UnloadTexture(tx_export_button);
     UnloadTexture(tx_base_cat);
     UnloadTexture(tx_hats);
+    UnloadTexture(tx_facewear);
 }
 
 void initialize_bg_buttons(Rectangle *buttons, size_t buttons_size)
@@ -219,12 +235,13 @@ void randomize(Configuration *cfg)
     cfg->bg = RANDOMIZATION_VALUE(NBACKGROUNDS);
     cfg->fur = RANDOMIZATION_VALUE(NFURS);
     cfg->hat = RANDOMIZATION_VALUE(NHATS);
+    cfg->face = RANDOMIZATION_VALUE(NFACEWEAR);
 }
 
 // TODO LIST
-// [-] draw face accesories
-// [-] draw body accesories
-// [-] add missing accesories' ui
+// [x] draw face accessories
+// [-] draw body accessories
+// [-] add missing accessories' ui
 // [-] make clear which option (fur, background...) is chosen
 // [-] add background
 // [-] add randomization button
