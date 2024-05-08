@@ -324,6 +324,7 @@ void randomize(Configuration *cfg)
 // [x] draw body accessories
 // [x] add missing accessories' ui
 // [x] make clear which option (fur, background...) is chosen
+// [-] translate to spanish
 // [-] better font
 // [-] add background
 // [-] add randomization button
