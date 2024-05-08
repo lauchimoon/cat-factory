@@ -194,24 +194,24 @@ int main()
         DrawTexture(tx_backgrounds_preview, frame_pos.x, frame_pos.height + 20, WHITE);
 
         // Fur preview
-        DrawText("Fur", 220, 10, 30, BLACK);
+        DrawText("Pelaje", 195, 5, 30, BLACK);
         DrawTexture(tx_fur_preview, 25, 40, WHITE);
         DrawRectangleLinesEx(buttons_furs[config.fur], 4, (!config.fur)? WHITE : BLACK); // indicates which fur is selected
 
         // Hat preview
-        DrawText("Hats", 210, 210, 30, BLACK);
+        DrawText("Gorros", 185, 210, 30, BLACK);
         DrawTextureRec(tx_hats_preview, (Rectangle){ config.hat*tx_hats_preview.width/NHATS, 0, tx_hats_preview.width/NHATS, tx_hats_preview.height },
                 (Vector2){ 175, 250 }, WHITE);
         DrawTexture(tx_arrow_selectors, 138, 250, WHITE);
 
         // Facewear preview
-        DrawText("Face Accessories", 110, 390, 30, BLACK);
+        DrawText("Accesorios para la cara", 70, 390, 30, BLACK);
         DrawTextureRec(tx_face_preview, (Rectangle){ config.face*tx_face_preview.width/NFACEWEAR, 0, tx_face_preview.width/NFACEWEAR, tx_face_preview.height },
                 (Vector2){ 175, 430 }, WHITE);
         DrawTexture(tx_arrow_selectors, 138, 430, WHITE);
 
         // Bodywear preview
-        DrawText("Body Accessories", 110, 570, 30, BLACK);
+        DrawText("Accesorios para el cuerpo", 50, 570, 30, BLACK);
         DrawTextureRec(tx_body_preview, (Rectangle){ config.body*tx_body_preview.width/NBODYWEAR, 0, tx_body_preview.width/NBODYWEAR, tx_body_preview.height },
                 (Vector2){ 175, 610 }, WHITE);
         DrawTexture(tx_arrow_selectors, 138, 610, WHITE);
@@ -324,7 +324,7 @@ void randomize(Configuration *cfg)
 // [x] draw body accessories
 // [x] add missing accessories' ui
 // [x] make clear which option (fur, background...) is chosen
-// [-] translate to spanish
+// [x] translate to spanish
 // [-] better font
 // [-] add background
 // [-] add randomization button
