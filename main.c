@@ -1,11 +1,13 @@
 #include "raylib.h"
 #include <stddef.h>
+#include <stdio.h>
 
 #define NFURS 7
 #define NHATS 12
 #define NFACEWEAR 10
 #define NBODYWEAR 8
 #define NBACKGROUNDS 7
+#define NSELECTORS 6
 
 #define WINDOW_TITLE "Cat Factory"
 
@@ -13,7 +15,7 @@
 
 enum {
     WINDOW_WIDTH = 1060,
-    WINDOW_HEIGHT = 740,
+    WINDOW_HEIGHT = 760,
     FPS = 60,
 
     CAT_OFFSET_X = 40,
@@ -35,8 +37,13 @@ Texture tx_backgrounds_preview;
 Texture tx_fur;
 Texture tx_fur_preview;
 Texture tx_hats;
+Texture tx_hats_preview;
 Texture tx_facewear;
+Texture tx_face_preview;
 Texture tx_bodywear;
+Texture tx_body_preview;
+
+Texture tx_arrow_selectors;
 
 Rectangle frame_src;
 Rectangle frame_pos;
@@ -48,6 +55,7 @@ void load_textures(void);
 void unload_textures(void);
 void initialize_bg_buttons(Rectangle *buttons, size_t buttons_size);
 void initialize_fur_buttons(Rectangle *buttons, size_t buttons_size);
+void initialize_selector_buttons(Rectangle *buttons, size_t buttons_size);
 void randomize(Configuration *cfg);
 
 int main()
@@ -72,9 +80,11 @@ int main()
 
     Rectangle buttons_backgrounds[NBACKGROUNDS] = { 0 };
     Rectangle buttons_furs[NFURS] = { 0 };
+    Rectangle buttons_selectors[6] = { 0 };
 
     initialize_bg_buttons(buttons_backgrounds, NBACKGROUNDS);
     initialize_fur_buttons(buttons_furs, NFURS);
+    initialize_selector_buttons(buttons_selectors, NSELECTORS);
 
     SetTargetFPS(FPS);
 
@@ -94,16 +104,22 @@ int main()
         }
 
         // Change hat
-        config.hat -= IsKeyPressed(KEY_LEFT);
-        config.hat += IsKeyPressed(KEY_RIGHT);
+        config.hat -= rectangle_pressed(buttons_selectors[0]);
+        config.hat += rectangle_pressed(buttons_selectors[1]);
+        if (config.hat >= NHATS) config.hat = 0;
+        if (config.hat < 0) config.hat = NHATS - 1;
 
         // Change facewear
-        config.face -= IsKeyPressed(KEY_A);
-        config.face += IsKeyPressed(KEY_D);
+        config.face -= rectangle_pressed(buttons_selectors[2]);
+        config.face += rectangle_pressed(buttons_selectors[3]);
+        if (config.face >= NFACEWEAR) config.face = 0;
+        if (config.face < 0) config.face = NFACEWEAR - 1;
 
         // Change bodywear
-        config.body -= IsKeyPressed(KEY_H);
-        config.body += IsKeyPressed(KEY_L);
+        config.body -= rectangle_pressed(buttons_selectors[4]);
+        config.body += rectangle_pressed(buttons_selectors[5]);
+        if (config.body >= NBODYWEAR) config.body = 0;
+        if (config.body < 0) config.body = NBODYWEAR - 1;
 
         // Scramble the configuration!
         if (IsKeyPressed(KEY_R)) randomize(&config);
@@ -174,13 +190,32 @@ int main()
         ClearBackground(RAYWHITE);
         DrawTexturePro(rt_cat_export.texture, frame_src, frame_pos, (Vector2){ 0, 0 }, 0.0f, WHITE);
         DrawTexture(tx_backgrounds_preview, frame_pos.x + frame_pos.width/7, frame_pos.height + 20, WHITE);
+
+        // Fur preview
+        DrawText("Fur", 220, 10, 30, BLACK);
         DrawTexture(tx_fur_preview, 25, 40, WHITE);
+
+        // Hat preview
+        DrawText("Hats", 210, 210, 30, BLACK);
+        DrawTextureRec(tx_hats_preview, (Rectangle){ config.hat*tx_hats_preview.width/NHATS, 0, tx_hats_preview.width/NHATS, tx_hats_preview.height },
+                (Vector2){ 175, 250 }, WHITE);
+        DrawTexture(tx_arrow_selectors, 138, 250, WHITE);
+
+        // Facewear preview
+        DrawText("Face Accessories", 110, 390, 30, BLACK);
+        DrawTextureRec(tx_face_preview, (Rectangle){ config.face*tx_face_preview.width/NFACEWEAR, 0, tx_face_preview.width/NFACEWEAR, tx_face_preview.height },
+                (Vector2){ 175, 430 }, WHITE);
+        DrawTexture(tx_arrow_selectors, 138, 430, WHITE);
+
+        // Bodywear preview
+        DrawText("Body Accessories", 110, 570, 30, BLACK);
+        DrawTextureRec(tx_body_preview, (Rectangle){ config.body*tx_body_preview.width/NBODYWEAR, 0, tx_body_preview.width/NBODYWEAR, tx_body_preview.height },
+                (Vector2){ 175, 610 }, WHITE);
+        DrawTexture(tx_arrow_selectors, 138, 610, WHITE);
+
+        // Export button
         DrawTexture(tx_export_button, export_button_bounds.x, export_button_bounds.y, rectangle_hovered(export_button_bounds)? GREEN : BLACK);
 
-        for (int i = 0; i < NBACKGROUNDS; ++i) {
-            DrawRectangleRec(buttons_backgrounds[i], Fade(RED, i/10.0f));
-            DrawRectangleRec(buttons_furs[i], Fade(RED, i/10.0f));
-        }
         EndDrawing();
     }
 
@@ -210,8 +245,13 @@ void load_textures(void)
     tx_fur = LoadTexture("./assets/fur.png");
     tx_fur_preview = LoadTexture("./assets/furs-selector.png");
     tx_hats = LoadTexture("./assets/hats.png");
+    tx_hats_preview = LoadTexture("./assets/hats-small.png");
     tx_facewear = LoadTexture("./assets/facewear.png");
+    tx_face_preview = LoadTexture("./assets/face-small.png");
     tx_bodywear = LoadTexture("./assets/body.png");
+    tx_body_preview = LoadTexture("./assets/body-small.png");
+
+    tx_arrow_selectors = LoadTexture("./assets/arrow-selectors.png");
 }
 
 void unload_textures(void)
@@ -222,8 +262,13 @@ void unload_textures(void)
     UnloadTexture(tx_export_button);
     UnloadTexture(tx_base_cat);
     UnloadTexture(tx_hats);
+    UnloadTexture(tx_hats_preview);
     UnloadTexture(tx_facewear);
+    UnloadTexture(tx_face_preview);
     UnloadTexture(tx_bodywear);
+    UnloadTexture(tx_body_preview);
+
+    UnloadTexture(tx_arrow_selectors);
 }
 
 void initialize_bg_buttons(Rectangle *buttons, size_t buttons_size)
@@ -246,6 +291,22 @@ void initialize_fur_buttons(Rectangle *buttons, size_t buttons_size)
     }
 }
 
+void initialize_selector_buttons(Rectangle *buttons, size_t buttons_size)
+{
+    buttons[0].y = 250;
+    buttons[1].y = 250;
+    buttons[2].y = 430;
+    buttons[3].y = 430;
+    buttons[4].y = 610;
+    buttons[5].y = 610;
+
+    for (int i = 0; i < buttons_size; ++i) {
+        buttons[i].x = 138 + 163*(i%2);
+        buttons[i].width = 37;
+        buttons[i].height = 128;
+    }
+}
+
 void randomize(Configuration *cfg)
 {
     cfg->bg = RANDOMIZATION_VALUE(NBACKGROUNDS);
@@ -258,8 +319,9 @@ void randomize(Configuration *cfg)
 // TODO LIST
 // [x] draw face accessories
 // [x] draw body accessories
-// [-] add missing accessories' ui
+// [x] add missing accessories' ui
 // [-] make clear which option (fur, background...) is chosen
+// [-] better font
 // [-] add background
 // [-] add randomization button
 // [-] enhance export button
