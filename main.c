@@ -189,11 +189,14 @@ int main()
 
         ClearBackground(RAYWHITE);
         DrawTexturePro(rt_cat_export.texture, frame_src, frame_pos, (Vector2){ 0, 0 }, 0.0f, WHITE);
-        DrawTexture(tx_backgrounds_preview, frame_pos.x + frame_pos.width/7, frame_pos.height + 20, WHITE);
+
+        // Backgrounds preview
+        DrawTexture(tx_backgrounds_preview, frame_pos.x, frame_pos.height + 20, WHITE);
 
         // Fur preview
         DrawText("Fur", 220, 10, 30, BLACK);
         DrawTexture(tx_fur_preview, 25, 40, WHITE);
+        DrawRectangleLinesEx(buttons_furs[config.fur], 4, (!config.fur)? WHITE : BLACK); // indicates which fur is selected
 
         // Hat preview
         DrawText("Hats", 210, 210, 30, BLACK);
@@ -275,8 +278,8 @@ void initialize_bg_buttons(Rectangle *buttons, size_t buttons_size)
 {
     for (int i = 0; i < buttons_size; ++i) {
         buttons[i].y = frame_pos.height + 20;
-        buttons[i].width = tx_backgrounds_preview.width/NBACKGROUNDS;
-        buttons[i].x = frame_pos.x + i*buttons[i].width + frame_pos.width/7;
+        buttons[i].width = 79;
+        buttons[i].x = frame_pos.x + i*buttons[i].width;
         buttons[i].height = tx_backgrounds_preview.height;
     }   
 }
@@ -285,8 +288,8 @@ void initialize_fur_buttons(Rectangle *buttons, size_t buttons_size)
 {
     for (int i = 0; i < buttons_size; ++i) {
         buttons[i].y = 40;
-        buttons[i].width = tx_fur_preview.width/NFURS;
-        buttons[i].x = 25 + i*buttons[i].width + 2.5;
+        buttons[i].width = 64;
+        buttons[i].x = 25 + i*buttons[i].width;
         buttons[i].height = tx_fur_preview.height;
     }
 }
@@ -320,7 +323,7 @@ void randomize(Configuration *cfg)
 // [x] draw face accessories
 // [x] draw body accessories
 // [x] add missing accessories' ui
-// [-] make clear which option (fur, background...) is chosen
+// [x] make clear which option (fur, background...) is chosen
 // [-] better font
 // [-] add background
 // [-] add randomization button
