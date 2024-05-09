@@ -45,14 +45,16 @@ Texture tx_body_preview;
 
 Texture tx_arrow_selectors;
 
+Font font;
+
 Rectangle frame_src;
 Rectangle frame_pos;
 
 // Utility functions
 bool rectangle_pressed(Rectangle box);
 bool rectangle_hovered(Rectangle box);
-void load_textures(void);
-void unload_textures(void);
+void load_resources(void);
+void unload_resources(void);
 void initialize_bg_buttons(Rectangle *buttons, size_t buttons_size);
 void initialize_fur_buttons(Rectangle *buttons, size_t buttons_size);
 void initialize_selector_buttons(Rectangle *buttons, size_t buttons_size);
@@ -64,7 +66,7 @@ int main()
     SetTraceLogLevel(LOG_NONE);
 #endif
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE);
-    load_textures();
+    load_resources();
 
     // Configurables
     Configuration config = { 0 };
@@ -194,24 +196,24 @@ int main()
         DrawTexture(tx_backgrounds_preview, frame_pos.x, frame_pos.height + 20, WHITE);
 
         // Fur preview
-        DrawText("Pelaje", 195, 5, 30, BLACK);
+        DrawTextEx(font, "Pelaje", (Vector2){ 195, 5 }, 30, 2.0, BLACK);
         DrawTexture(tx_fur_preview, 25, 40, WHITE);
         DrawRectangleLinesEx(buttons_furs[config.fur], 4, (!config.fur)? WHITE : BLACK); // indicates which fur is selected
 
         // Hat preview
-        DrawText("Gorros", 185, 210, 30, BLACK);
+        DrawTextEx(font, "Gorros", (Vector2){ 185, 210 }, 30, 2.0, BLACK);
         DrawTextureRec(tx_hats_preview, (Rectangle){ config.hat*tx_hats_preview.width/NHATS, 0, tx_hats_preview.width/NHATS, tx_hats_preview.height },
                 (Vector2){ 175, 250 }, WHITE);
         DrawTexture(tx_arrow_selectors, 138, 250, WHITE);
 
         // Facewear preview
-        DrawText("Accesorios para la cara", 70, 390, 30, BLACK);
+        DrawTextEx(font, "Accesorios para la cara", (Vector2){ 50, 390 }, 30, 2.0, BLACK);
         DrawTextureRec(tx_face_preview, (Rectangle){ config.face*tx_face_preview.width/NFACEWEAR, 0, tx_face_preview.width/NFACEWEAR, tx_face_preview.height },
                 (Vector2){ 175, 430 }, WHITE);
         DrawTexture(tx_arrow_selectors, 138, 430, WHITE);
 
         // Bodywear preview
-        DrawText("Accesorios para el cuerpo", 50, 570, 30, BLACK);
+        DrawTextEx(font, "Accesorios para el cuerpo", (Vector2){ 35, 570 }, 30, 2.0, BLACK);
         DrawTextureRec(tx_body_preview, (Rectangle){ config.body*tx_body_preview.width/NBODYWEAR, 0, tx_body_preview.width/NBODYWEAR, tx_body_preview.height },
                 (Vector2){ 175, 610 }, WHITE);
         DrawTexture(tx_arrow_selectors, 138, 610, WHITE);
@@ -223,7 +225,7 @@ int main()
     }
 
     UnloadRenderTexture(rt_cat_export);
-    unload_textures();
+    unload_resources();
     CloseWindow();
     return 0;
 }
@@ -238,7 +240,7 @@ bool rectangle_hovered(Rectangle box)
     return CheckCollisionPointRec(GetMousePosition(), box);
 }
 
-void load_textures(void)
+void load_resources(void)
 {
     tx_base_cat = LoadTexture("./assets/base-cat.png");
     tx_bg_frame = LoadTexture("./assets/frame.png");
@@ -255,9 +257,11 @@ void load_textures(void)
     tx_body_preview = LoadTexture("./assets/body-small.png");
 
     tx_arrow_selectors = LoadTexture("./assets/arrow-selectors.png");
+
+    font = LoadFontEx("./assets/font.ttf", 30, NULL, 0);
 }
 
-void unload_textures(void)
+void unload_resources(void)
 {
     UnloadTexture(tx_bg_frame);
     UnloadTexture(tx_backgrounds);
@@ -272,6 +276,8 @@ void unload_textures(void)
     UnloadTexture(tx_body_preview);
 
     UnloadTexture(tx_arrow_selectors);
+
+    UnloadFont(font);
 }
 
 void initialize_bg_buttons(Rectangle *buttons, size_t buttons_size)
@@ -325,7 +331,7 @@ void randomize(Configuration *cfg)
 // [x] add missing accessories' ui
 // [x] make clear which option (fur, background...) is chosen
 // [x] translate to spanish
-// [-] better font
+// [x] better font
 // [-] add background
 // [-] add randomization button
 // [-] enhance export button
