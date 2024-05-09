@@ -5,7 +5,7 @@ LDLIBS = -L$(RAYLIB_PATH) -lraylib -lGL -lm -ldl -lpthread
 INCLUDE = -I$(RAYLIB_PATH)
 DEFINES =
 CAT_DEBUG ?= 0
-OUT = main
+OUT = cat-factory
 
 ifeq ($(CAT_DEBUG),1)
 	DEFINES+=-DCAT_DEBUG

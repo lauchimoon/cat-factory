@@ -3,21 +3,21 @@
 #include <stdio.h>
 
 // Bundled assets go here
-//#include "assets/build/bg.h"
-//#include "assets/build/base-cat.h"
+#include "assets/build/bg.h"
+#include "assets/build/base-cat.h"
 #include "assets/build/frame.h"
 #include "assets/build/export-button.h"
-//#include "assets/build/backgrounds.h"
+#include "assets/build/backgrounds.h"
 #include "assets/build/backgrounds-small.h"
-//#include "assets/build/fur.h"
-//#include "assets/build/furs-selector.h"
-//#include "assets/build/hats.h"
-//#include "assets/build/hats-small.h"
-//#include "assets/build/facewear.h"
-//#include "assets/build/face-small.h"
-//#include "assets/build/body.h"
-//#include "assets/build/body-small.h"
-//#include "assets/build/arrow-selectors.h"
+#include "assets/build/fur.h"
+#include "assets/build/furs-selector.h"
+#include "assets/build/hats.h"
+#include "assets/build/hats-small.h"
+#include "assets/build/facewear.h"
+#include "assets/build/face-small.h"
+#include "assets/build/body.h"
+#include "assets/build/body-small.h"
+#include "assets/build/arrow-selectors.h"
 #include "assets/build/font.h"
 
 #define NFURS 7
@@ -276,22 +276,22 @@ bool rectangle_hovered(Rectangle box)
 
 void load_resources(void)
 {
-    //tx_base_cat = load_texture_from_memory(".png", base_cat_png, base_cat_png_len);
+    tx_base_cat = load_texture_from_memory(".png", base_cat_png, base_cat_png_len);
     tx_bg_frame = load_texture_from_memory(".png", frame_png, frame_png_len);
     tx_export_button = load_texture_from_memory(".png", export_button_png, export_button_png_len);
-    //tx_backgrounds = load_texture_from_memory(".png", backgrounds_png, backgrounds_png_len);
+    tx_backgrounds = load_texture_from_memory(".png", backgrounds_png, backgrounds_png_len);
     tx_backgrounds_preview = load_texture_from_memory(".png", backgrounds_small_png, backgrounds_small_png_len);
-    //tx_fur = load_texture_from_memory(".png", fur_png, fur_png_len);
-    //tx_fur_preview = load_texture_from_memory(".png", furs_selector_png, furs_selector_png_len);
-    //tx_hats = load_texture_from_memory(".png", hats_png, hats_png_len);
-    //tx_hats_preview = load_texture_from_memory(".png", hats_small_png, hats_small_png_len);
-    //tx_facewear = load_texture_from_memory(".png", facewear_png, facewear_png_len);
-    //tx_face_preview = load_texture_from_memory(".png", face_small_png, face_small_png_len);
-    //tx_bodywear = load_texture_from_memory(".png", body_png, body_png_len);
-    //tx_body_preview = load_texture_from_memory(".png", body_small_png, body_small_png_len);
+    tx_fur = load_texture_from_memory(".png", fur_png, fur_png_len);
+    tx_fur_preview = load_texture_from_memory(".png", furs_selector_png, furs_selector_png_len);
+    tx_hats = load_texture_from_memory(".png", hats_png, hats_png_len);
+    tx_hats_preview = load_texture_from_memory(".png", hats_small_png, hats_small_png_len);
+    tx_facewear = load_texture_from_memory(".png", facewear_png, facewear_png_len);
+    tx_face_preview = load_texture_from_memory(".png", face_small_png, face_small_png_len);
+    tx_bodywear = load_texture_from_memory(".png", body_png, body_png_len);
+    tx_body_preview = load_texture_from_memory(".png", body_small_png, body_small_png_len);
 
-    //tx_arrow_selectors = load_texture_from_memory(".png", arrow_selectors_png, arrow_selectors_png_len);
-    //tx_bg = load_texture_from_memory(".png", bg_png, bg_png_len);
+    tx_arrow_selectors = load_texture_from_memory(".png", arrow_selectors_png, arrow_selectors_png_len);
+    tx_bg = load_texture_from_memory(".png", bg_png, bg_png_len);
 
     font = LoadFontFromMemory(".ttf", font_ttf, font_ttf_len, 30, NULL, 0);
 }
