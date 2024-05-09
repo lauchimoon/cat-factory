@@ -2,6 +2,24 @@
 #include <stddef.h>
 #include <stdio.h>
 
+// Bundled assets go here
+//#include "assets/build/bg.h"
+//#include "assets/build/base-cat.h"
+#include "assets/build/frame.h"
+#include "assets/build/export-button.h"
+//#include "assets/build/backgrounds.h"
+//#include "assets/build/backgrounds-small.h"
+//#include "assets/build/fur.h"
+//#include "assets/build/furs-selector.h"
+//#include "assets/build/hats.h"
+//#include "assets/build/hats-small.h"
+//#include "assets/build/facewear.h"
+//#include "assets/build/face-small.h"
+//#include "assets/build/body.h"
+//#include "assets/build/body-small.h"
+//#include "assets/build/arrow-selectors.h"
+#include "assets/build/font.h"
+
 #define NFURS 7
 #define NHATS 12
 #define NFACEWEAR 10
@@ -62,6 +80,8 @@ void initialize_bg_buttons(Rectangle *buttons, size_t buttons_size);
 void initialize_fur_buttons(Rectangle *buttons, size_t buttons_size);
 void initialize_selector_buttons(Rectangle *buttons, size_t buttons_size);
 void randomize(Configuration *cfg);
+
+Texture load_texture_from_memory(const char *file_type, const unsigned char *file_data, int data_size);
 
 int main()
 {
@@ -246,24 +266,24 @@ bool rectangle_hovered(Rectangle box)
 
 void load_resources(void)
 {
-    tx_base_cat = LoadTexture("./assets/base-cat.png");
-    tx_bg_frame = LoadTexture("./assets/frame.png");
-    tx_export_button = LoadTexture("./assets/export-button.png");
-    tx_backgrounds = LoadTexture("./assets/backgrounds.png");
-    tx_backgrounds_preview = LoadTexture("./assets/backgrounds-small.png");
-    tx_fur = LoadTexture("./assets/fur.png");
-    tx_fur_preview = LoadTexture("./assets/furs-selector.png");
-    tx_hats = LoadTexture("./assets/hats.png");
-    tx_hats_preview = LoadTexture("./assets/hats-small.png");
-    tx_facewear = LoadTexture("./assets/facewear.png");
-    tx_face_preview = LoadTexture("./assets/face-small.png");
-    tx_bodywear = LoadTexture("./assets/body.png");
-    tx_body_preview = LoadTexture("./assets/body-small.png");
+    //tx_base_cat = load_texture_from_memory(".png", base_cat_png, base_cat_png_len);
+    tx_bg_frame = load_texture_from_memory(".png", frame_png, frame_png_len);
+    tx_export_button = load_texture_from_memory(".png", export_button_png, export_button_png_len);
+    //tx_backgrounds = load_texture_from_memory(".png", backgrounds_png, backgrounds_png_len);
+    //tx_backgrounds_preview = load_texture_from_memory(".png", backgrounds_small_png, backgrounds_small_png_len);
+    //tx_fur = load_texture_from_memory(".png", fur_png, fur_png_len);
+    //tx_fur_preview = load_texture_from_memory(".png", furs_selector_png, furs_selector_png_len);
+    //tx_hats = load_texture_from_memory(".png", hats_png, hats_png_len);
+    //tx_hats_preview = load_texture_from_memory(".png", hats_small_png, hats_small_png_len);
+    //tx_facewear = load_texture_from_memory(".png", facewear_png, facewear_png_len);
+    //tx_face_preview = load_texture_from_memory(".png", face_small_png, face_small_png_len);
+    //tx_bodywear = load_texture_from_memory(".png", body_png, body_png_len);
+    //tx_body_preview = load_texture_from_memory(".png", body_small_png, body_small_png_len);
 
-    tx_arrow_selectors = LoadTexture("./assets/arrow-selectors.png");
-    tx_bg = LoadTexture("./assets/bg.png");
+    //tx_arrow_selectors = load_texture_from_memory(".png", arrow_selectors_png, arrow_selectors_png_len);
+    //tx_bg = load_texture_from_memory(".png", bg_png, bg_png_len);
 
-    font = LoadFontEx("./assets/font.ttf", 30, NULL, 0);
+    font = LoadFontFromMemory(".ttf", font_ttf, font_ttf_len, 30, NULL, 0);
 }
 
 void unload_resources(void)
@@ -331,6 +351,15 @@ void randomize(Configuration *cfg)
     cfg->body = RANDOMIZATION_VALUE(NBODYWEAR);
 }
 
+Texture load_texture_from_memory(const char *file_type, const unsigned char *file_data, int data_size)
+{
+    Image tmp = LoadImageFromMemory(file_type, file_data, data_size);
+    Texture ret = LoadTextureFromImage(tmp);
+    UnloadImage(tmp);
+
+    return ret;
+}
+
 // TODO LIST
 // [x] draw face accessories
 // [x] draw body accessories
@@ -341,4 +370,4 @@ void randomize(Configuration *cfg)
 // [x] add background
 // [x] add randomization button
 // [x] enhance export button
-// [-] embed resources into application
+// [x] embed resources into application
