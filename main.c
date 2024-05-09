@@ -8,7 +8,7 @@
 #include "assets/build/frame.h"
 #include "assets/build/export-button.h"
 //#include "assets/build/backgrounds.h"
-//#include "assets/build/backgrounds-small.h"
+#include "assets/build/backgrounds-small.h"
 //#include "assets/build/fur.h"
 //#include "assets/build/furs-selector.h"
 //#include "assets/build/hats.h"
@@ -96,6 +96,7 @@ int main()
 
     // Variables
     RenderTexture rt_cat_export = LoadRenderTexture(tx_bg_frame.width, tx_bg_frame.height);
+    int frame_counter = 0; // To make export text appear and disappear
 
     // Constants
     frame_src = (Rectangle){ 0, 0, rt_cat_export.texture.width, -rt_cat_export.texture.height };
@@ -151,10 +152,18 @@ int main()
 
         // Export cat image
         if (rectangle_pressed(export_button_bounds)) {
+            ++frame_counter;
             Image cat_image = LoadImageFromTexture(rt_cat_export.texture);
             ImageFlipVertical(&cat_image);
             ExportImage(cat_image, "cat.png");
             UnloadImage(cat_image);
+        }
+
+        if (frame_counter > 0) {
+            ++frame_counter;
+            if (frame_counter >= 60) {
+                frame_counter = 0;
+            }
         }
 
         BeginDrawing();
@@ -244,6 +253,7 @@ int main()
 
         // Export button
         DrawTexture(tx_export_button, WINDOW_WIDTH - rt_cat_export.texture.width, WINDOW_HEIGHT - 110, WHITE);
+        DrawTextEx(font, "Exportado!", (Vector2){ WINDOW_WIDTH - 370, WINDOW_HEIGHT - 140 }, 30, 2.0, (frame_counter > 0)? WHITE : BLANK);
 
         EndDrawing();
     }
@@ -270,7 +280,7 @@ void load_resources(void)
     tx_bg_frame = load_texture_from_memory(".png", frame_png, frame_png_len);
     tx_export_button = load_texture_from_memory(".png", export_button_png, export_button_png_len);
     //tx_backgrounds = load_texture_from_memory(".png", backgrounds_png, backgrounds_png_len);
-    //tx_backgrounds_preview = load_texture_from_memory(".png", backgrounds_small_png, backgrounds_small_png_len);
+    tx_backgrounds_preview = load_texture_from_memory(".png", backgrounds_small_png, backgrounds_small_png_len);
     //tx_fur = load_texture_from_memory(".png", fur_png, fur_png_len);
     //tx_fur_preview = load_texture_from_memory(".png", furs_selector_png, furs_selector_png_len);
     //tx_hats = load_texture_from_memory(".png", hats_png, hats_png_len);
@@ -371,3 +381,4 @@ Texture load_texture_from_memory(const char *file_type, const unsigned char *fil
 // [x] add randomization button
 // [x] enhance export button
 // [x] embed resources into application
+// [x] display text when exporting
