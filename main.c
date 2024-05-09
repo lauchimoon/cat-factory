@@ -76,12 +76,12 @@ int main()
 
     // Variables
     RenderTexture rt_cat_export = LoadRenderTexture(tx_bg_frame.width, tx_bg_frame.height);
-    Rectangle export_button_bounds = { WINDOW_WIDTH - rt_cat_export.texture.width, WINDOW_HEIGHT - 110,
-                                       tx_export_button.width, tx_export_button.height };
 
     // Constants
     frame_src = (Rectangle){ 0, 0, rt_cat_export.texture.width, -rt_cat_export.texture.height };
     frame_pos = (Rectangle){ WINDOW_WIDTH - rt_cat_export.texture.width, 0, rt_cat_export.texture.width, rt_cat_export.texture.height };
+    Rectangle randomize_button_bounds = { WINDOW_WIDTH - rt_cat_export.texture.width, WINDOW_HEIGHT - 95, tx_export_button.width/2 - 20, tx_export_button.height - 30 };
+    Rectangle export_button_bounds = { WINDOW_WIDTH - 265, WINDOW_HEIGHT - 95, tx_export_button.width/2 - 30, tx_export_button.height - 30 };
 
     Rectangle buttons_backgrounds[NBACKGROUNDS] = { 0 };
     Rectangle buttons_furs[NFURS] = { 0 };
@@ -127,7 +127,7 @@ int main()
         if (config.body < 0) config.body = NBODYWEAR - 1;
 
         // Scramble the configuration!
-        if (IsKeyPressed(KEY_R)) randomize(&config);
+        if (rectangle_pressed(randomize_button_bounds)) randomize(&config);
 
         // Export cat image
         if (rectangle_pressed(export_button_bounds)) {
@@ -223,7 +223,7 @@ int main()
         DrawTexture(tx_arrow_selectors, 138, 610, WHITE);
 
         // Export button
-        DrawTexture(tx_export_button, export_button_bounds.x, export_button_bounds.y, rectangle_hovered(export_button_bounds)? GREEN : BLACK);
+        DrawTexture(tx_export_button, WINDOW_WIDTH - rt_cat_export.texture.width, WINDOW_HEIGHT - 110, WHITE);
 
         EndDrawing();
     }
@@ -339,6 +339,6 @@ void randomize(Configuration *cfg)
 // [x] translate to spanish
 // [x] better font
 // [x] add background
-// [-] add randomization button
-// [-] enhance export button
+// [x] add randomization button
+// [x] enhance export button
 // [-] embed resources into application
