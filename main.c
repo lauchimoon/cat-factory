@@ -12,6 +12,8 @@
 #define WINDOW_TITLE "Cat Factory"
 
 #define RANDOMIZATION_VALUE(x) (GetRandomValue(0, x - 1))
+#define BG_COLOR1 (Color){ 61, 113, 173, 255 }
+#define BG_COLOR2 WHITE
 
 enum {
     WINDOW_WIDTH = 1060,
@@ -44,6 +46,7 @@ Texture tx_bodywear;
 Texture tx_body_preview;
 
 Texture tx_arrow_selectors;
+Texture tx_bg;
 
 Font font;
 
@@ -189,7 +192,8 @@ int main()
             );
         EndTextureMode();
 
-        ClearBackground(RAYWHITE);
+        ClearBackground(BLACK);
+        DrawTexture(tx_bg, 0, 0, WHITE);
         DrawTexturePro(rt_cat_export.texture, frame_src, frame_pos, (Vector2){ 0, 0 }, 0.0f, WHITE);
 
         // Backgrounds preview
@@ -257,6 +261,7 @@ void load_resources(void)
     tx_body_preview = LoadTexture("./assets/body-small.png");
 
     tx_arrow_selectors = LoadTexture("./assets/arrow-selectors.png");
+    tx_bg = LoadTexture("./assets/bg.png");
 
     font = LoadFontEx("./assets/font.ttf", 30, NULL, 0);
 }
@@ -276,6 +281,7 @@ void unload_resources(void)
     UnloadTexture(tx_body_preview);
 
     UnloadTexture(tx_arrow_selectors);
+    UnloadTexture(tx_bg);
 
     UnloadFont(font);
 }
@@ -332,8 +338,7 @@ void randomize(Configuration *cfg)
 // [x] make clear which option (fur, background...) is chosen
 // [x] translate to spanish
 // [x] better font
-// [-] add background
+// [x] add background
 // [-] add randomization button
 // [-] enhance export button
-// [-] add starting screen?
 // [-] embed resources into application
